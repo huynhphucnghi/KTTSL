@@ -26,13 +26,14 @@ void loop() {
   }
   switch(state){
     case READY:
-      if (temp =='#') state = CHECK;
-      else if((32 <= temp && temp <= 126)) 
+      if (temp =='#') state = CHECK;        // Khi toi '#' se check code
+      else if((32 <= temp && temp <= 126))  // Nguoc lai thi them vao buffer
         strncat(cmdBuffer, &temp, 1); 
-      if (cmdBuffer[0] != 0) T++;
+      if (cmdBuffer[0] != 0) T++;           // Kiem tra ki tu ket thuc
       break;
-    case CHECK:
-      if (strlen(cmdBuffer) >= strlen(SECRET_CODE) && strcmp(SECRET_CODE, cmdBuffer+strlen(cmdBuffer)-4) == 0) {
+    case CHECK:                             // So sanh buffer voi SECRET_CODE
+      if (strlen(cmdBuffer) >= strlen(SECRET_CODE) && 
+      strcmp(SECRET_CODE, cmdBuffer+strlen(cmdBuffer)-4) == 0) {
         digitalWrite(ledPin,LOW);
         Serial.println("LED_ON");
       }
@@ -45,12 +46,12 @@ void loop() {
       cmdBuffer[0] = 0;
       break;
     default:
-      state = READY;
+      state = READY;                        // Trang thai khoi dau
       digitalWrite(ledPin,HIGH);
       Serial.println("INIT");
       break;
   }
-  if (T > T_OUT) {
+  if (T > T_OUT) {                          // Kiem tra TIMEOUT
     state = READY;
     Serial.println("TIME OUT");
     T = 0;
